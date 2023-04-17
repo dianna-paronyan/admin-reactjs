@@ -92,7 +92,7 @@ function Products() {
                   </TableCell>
                   <TableCell align="center">{product.price}</TableCell>
                   <TableCell align="center">{product.description}</TableCell>
-                  <TableCell align="center">{}</TableCell>
+                  <TableCell align="center">{product.Category.name}</TableCell>
                   <TableCell align="center">{product.quantity}</TableCell>
                   <TableCell align="center">
                     <Link to={`/updateProduct/${product.id}`}>
