@@ -9,35 +9,12 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import useLogin from "../../hooks/useLogin";
 
 
 function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { email,setEmail,password,setPassword,handleSubmitLogin} = useLogin()
   const navigate = useNavigate();
-
-  async function handleSubmitLogin(e){
-    e.preventDefault();
-      try {
-        const response = await fetch("http://localhost:3001/login", {
-          method: "POST",
-          body: JSON.stringify({
-            email,
-            password
-          }),
-          headers: {
-            "Content-type": "application/json; charset=UTF-8",
-          },
-        });
-        const data = await response.json();
-        console.log(data, "data");
-      } catch (err) {
-        console.log(err);
-      }
-      setEmail('');
-      setPassword('');
-    }
 
   return (
     <Container component="main" maxWidth="xs">
