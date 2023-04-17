@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 
@@ -25,7 +25,7 @@ function useLogin() {
             setUser(data);
             console.log(data, "data");
             if(data.jwt && data.role === 1){
-                console.log(data,'d');
+                console.log(user,'d');
                 navigate('/admin');
               }else{
                 navigate('/home')

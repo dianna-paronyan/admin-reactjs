@@ -13,8 +13,9 @@ import useLogin from "../../hooks/useLogin";
 
 
 function Login() {
-  const { email,setEmail,password,setPassword,handleSubmitLogin} = useLogin()
+  const { email,setEmail,password,setPassword,handleSubmitLogin, user} = useLogin();
   const navigate = useNavigate();
+  console.log(user);
 
   return (
     <Container component="main" maxWidth="xs">

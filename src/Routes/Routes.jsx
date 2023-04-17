@@ -11,10 +11,7 @@ import CreateProduct from "../components/CreateProduct";
 import EditProduct from "../components/EditProduct";
 
 function AppRoutes() {
-  // const value = useUserContext();
-  // console.log(value);
   return (
-    <UserProvider>
       <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
@@ -27,7 +24,6 @@ function AppRoutes() {
           <Route path="/updateProduct/:id" element={<EditProduct />}/>
         </Route>
       </Routes>
-    </UserProvider>
   );
 }
 
