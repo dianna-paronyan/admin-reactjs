@@ -1,7 +1,11 @@
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { useState } from "react";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import { useEffect, useState } from "react";
 
 function CreateProduct() {
   const [name, setName] = useState("");
@@ -10,6 +14,8 @@ function CreateProduct() {
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState("");
+  const [categories, setCategories] = useState([]);
+  console.log(categoryId);
 
   async function submitCreateProduct(e) {
     e.preventDefault();
@@ -39,6 +45,15 @@ function CreateProduct() {
     setDescription("");
     setQuantity("");
   }
+
+  useEffect(() => {
+    fetch("http://localhost:3001/categories")
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        setCategories(res);
+      });
+  }, []);
 
   return (
     <div>
@@ -70,13 +85,20 @@ function CreateProduct() {
           value={image}
           onChange={(e) => setImage(e.target.value)}
         />
-        <TextField
-          id="outlined-basic"
-          label="Category"
-          variant="outlined"
-          value={categoryId}
-          onChange={(e) => setcategoryId(e.target.value)}
-        />
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Category</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={categoryId}
+            label="Category"
+            onChange={(e) => setcategoryId(e.target.value)}
+          >
+            {categories.map((category) => (
+              <MenuItem value={category.id}>{category.name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <TextField
           id="outlined-basic"
           label="Price"
