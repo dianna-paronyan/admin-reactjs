@@ -26,8 +26,9 @@ function Products() {
       });
   }, [isDel]);
 
-  const deleteProduct = (id) => async (e) => {
-    e.preventDefault();
+  const deleteProduct = async (id) => {
+    const token = JSON.parse(localStorage.getItem('user'));
+    console.log(token.jwt,'t');
     try {
       const response = await fetch(
         `http://localhost:3001/deleteProduct/${id}`,
@@ -38,6 +39,7 @@ function Products() {
           }),
           headers: {
             "Content-type": "application/json; charset=UTF-8",
+            "Authorization": token.jwt
           },
         }
       );
@@ -98,7 +100,7 @@ function Products() {
                     <Link to={`/updateProduct/${product.id}`}>
                       <EditIcon />
                     </Link>
-                    <DeleteOutlineIcon onClick={deleteProduct(product.id)} />
+                    <DeleteOutlineIcon onClick={()=>deleteProduct(product.id)} />
                   </TableCell>
                 </TableRow>
               ))}

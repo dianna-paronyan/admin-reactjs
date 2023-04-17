@@ -19,6 +19,7 @@ function CreateProduct() {
 
   async function submitCreateProduct(e) {
     e.preventDefault();
+    const token = JSON.parse(localStorage.getItem('user'));
     try {
       const response = await fetch("http://localhost:3001/createProduct", {
         method: "POST",
@@ -32,6 +33,7 @@ function CreateProduct() {
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
+          "Authorization": token.jwt
         },
       });
       const data = await response.json();
@@ -95,7 +97,7 @@ function CreateProduct() {
             onChange={(e) => setcategoryId(e.target.value)}
           >
             {categories.map((category) => (
-              <MenuItem value={category.id}>{category.name}</MenuItem>
+              <MenuItem value={category.id} key={category.id}>{category.name}</MenuItem>
             ))}
           </Select>
         </FormControl>
