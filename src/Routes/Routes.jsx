@@ -2,7 +2,6 @@ import { Route, Routes } from "react-router-dom";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import Layout from "../Layouts/Layout";
-import UserProvider, { useUserContext } from "../Providers/UserProvider";
 import Home from "../pages/Home";
 import Admin from "../pages/adminPage/Admin";
 import Products from "../components/Products";
