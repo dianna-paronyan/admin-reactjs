@@ -23,6 +23,7 @@ function useLogin() {
             });
             const data = await response.json();
             setUser(data);
+            localStorage.setItem('user', JSON.stringify(data));
             console.log(data, "data");
             if(data.jwt && data.role === 1){
                 console.log(user,'d');
