@@ -11,11 +11,12 @@ import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Products() {
   const [products, setProducts] = useState([]);
   const [isDel, setIsDel] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch("http://localhost:3001/products")
@@ -43,8 +44,11 @@ function Products() {
           },
         }
       );
+      if(response.status === 401 || response.status === 403){
+        console.log(response.status);
+        navigate('/');
+      }
       const data = await response.json();
-      console.log(data, "data");
       setIsDel(true);
     } catch (err) {
       console.log(err);
@@ -63,7 +67,7 @@ function Products() {
           }}
         >
           <Button variant="contained">
-            <Link to="/createProduct">New Product</Link>{" "}
+            <Link to="/createProduct">New Product</Link>
           </Button>
         </Stack>
         <TableContainer
@@ -114,56 +118,3 @@ function Products() {
 
 export default Products;
 
-{
-  /* <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style} key={product.id}>
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              Text in a modal
-            </Typography>
-            <TextField
-              id="outlined-basic"
-              label="Name"
-              variant="outlined"
-              onChange={(e) => setName(e.target.value)}
-            />
-            <TextField
-              id="outlined-basic"
-              label="Image"
-              variant="outlined"
-              onChange={(e) => setmage(e.target.value)}
-            />
-            <TextField
-              id="outlined-basic"
-              label="Category"
-              variant="outlined"
-              onChange={(e) => setcategoryId(e.target.value)}
-            />
-            <TextField
-              id="outlined-basic"
-              label="Price"
-              variant="outlined"
-              onChange={(e) => setPrice(e.target.value)}
-            />
-            <TextField
-              id="outlined-basic"
-              label="Description"
-              variant="outlined"
-              onChange={(e) => setDescription(e.target.value)}
-            />
-            <TextField
-              id="outlined-basic"
-              label="Quantity"
-              variant="outlined"
-              onChange={(e) => setQuantity(e.target.value)}
-            />
-            <Button variant="outlined" onClick={submitUpdateProduct(product.id)}>
-              Update
-            </Button>
-          </Box>
-        </Modal> */
-}
