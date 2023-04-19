@@ -6,46 +6,49 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function CreateProduct() {
-  const [name, setName] = useState("");
-  const [image, setImage] = useState("");
-  const [categoryId, setcategoryId] = useState("");
-  const [price, setPrice] = useState("");
-  const [description, setDescription] = useState("");
-  const [quantity, setQuantity] = useState("");
+  const [product, setProduct] = useState({
+    name: "",
+    image: "",
+    categoryId: "",
+    price: "",
+    description: "",
+    quantity: "",
+  });
   const [categories, setCategories] = useState([]);
-  console.log(categoryId);
+  const navigate = useNavigate();
 
   async function submitCreateProduct(e) {
     e.preventDefault();
-    const token = JSON.parse(localStorage.getItem('user'));
+    const token = JSON.parse(localStorage.getItem("user"));
     try {
       const response = await fetch("http://localhost:3001/createProduct", {
         method: "POST",
         body: JSON.stringify({
-          name,
-          image,
-          categoryId,
-          price,
-          description,
-          quantity,
+          name: product.name,
+          image: product.image,
+          categoryId: product.categoryId,
+          price: product.price,
+          description: product.description,
+          quantity: product.quantity,
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
-          "Authorization": token.jwt
+          Authorization: token.jwt,
         },
       });
+      if(response.status === 401 || response.status === 403){
+        console.log(response.status);
+        navigate('/');
+      }
       const data = await response.json();
       console.log(data, "data");
     } catch (err) {
       console.log(err);
     }
-    setName("");
-    setImage("");
-    setPrice("");
-    setDescription("");
-    setQuantity("");
+    setProduct({ name:'',image:'',categoryId:'',price:'',description:'',quantity:''})
   }
 
   useEffect(() => {
@@ -77,27 +80,29 @@ function CreateProduct() {
           id="outlined-basic"
           label="Name"
           variant="outlined"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={product.name}
+          onChange={(e) => setProduct(prevState => ({ ...prevState, name: e.target.value }))}
         />
         <TextField
           id="outlined-basic"
           label="Image"
           variant="outlined"
-          value={image}
-          onChange={(e) => setImage(e.target.value)}
+          value={product.image}
+          onChange={(e) => setProduct(prevState => ({ ...prevState, image: e.target.value }))}
         />
         <FormControl fullWidth>
           <InputLabel id="demo-simple-select-label">Category</InputLabel>
           <Select
             labelId="demo-simple-select-label"
             id="demo-simple-select"
-            value={categoryId}
+            value={product.categoryId}
             label="Category"
-            onChange={(e) => setcategoryId(e.target.value)}
+            onChange={(e) => setProduct(prevState => ({ ...prevState, categoryId: e.target.value }))}
           >
             {categories.map((category) => (
-              <MenuItem value={category.id} key={category.id}>{category.name}</MenuItem>
+              <MenuItem value={category.id} key={category.id}>
+                {category.name}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -105,22 +110,22 @@ function CreateProduct() {
           id="outlined-basic"
           label="Price"
           variant="outlined"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
+          value={product.price}
+          onChange={(e) => setProduct(prevState => ({ ...prevState, price: e.target.value }))}
         />
         <TextField
           id="outlined-basic"
           label="Description"
           variant="outlined"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          value={product.description}
+          onChange={(e) => setProduct(prevState => ({ ...prevState, description: e.target.value }))}
         />
         <TextField
           id="outlined-basic"
           label="Quantity"
           variant="outlined"
-          value={quantity}
-          onChange={(e) => setQuantity(e.target.value)}
+          value={product.quantity}
+          onChange={(e) => setProduct(prevState => ({ ...prevState, quantity: e.target.value }))}
         />
         <Button variant="outlined" onClick={submitCreateProduct}>
           Submit
