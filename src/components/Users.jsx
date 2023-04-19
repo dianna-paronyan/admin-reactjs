@@ -5,17 +5,25 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Users() {
   const [users, setUsers] = useState([]);
+  const navigate = useNavigate();
+  
   useEffect(() => {
-    fetch("http://localhost:3001/users")
+    const token = JSON.parse(localStorage.getItem('user'));
+    fetch("http://localhost:3001/users", {
+      headers: {
+        "Authorization": token.jwt
+      }
+    })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
+        if(res.status === 401 || res.status === 403){
+          navigate('/');
+        }
         setUsers(res);
       });
   }, []);
@@ -31,7 +39,6 @@ function Users() {
               <TableCell align="center">UserName</TableCell>
               <TableCell align="center">Email</TableCell>
               <TableCell align="center">Role</TableCell>
-              <TableCell align="center">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -43,10 +50,6 @@ function Users() {
                 <TableCell align="center">{user.userName}</TableCell>
                 <TableCell align="center">{user.email}</TableCell>
                 <TableCell align="center">{user.role}</TableCell>
-                <TableCell align="center">
-                  <EditIcon />
-                  <DeleteOutlineIcon />
-                </TableCell>
               </TableRow>
             ))}
           </TableBody>
