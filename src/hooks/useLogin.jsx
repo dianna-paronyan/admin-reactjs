@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useAuth from "./useAuth";
 
 
 function useLogin() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [user,setUser] = useState({});
+    const [error, setError] = useState('');
     const navigate = useNavigate();
+    const {decodedToken} = useAuth();
 
     async function handleSubmitLogin(e){
         e.preventDefault();
@@ -22,13 +25,17 @@ function useLogin() {
               },
             });
             const data = await response.json();
+            const userData = {jwt:data.jwt, userName: data.userName}
             setUser(data);
-            localStorage.setItem('user', JSON.stringify(data));
+            localStorage.setItem('user', JSON.stringify(userData));
+            if(response.status===400){
+              
+              setError(data.message ? data.message.split('length').join('') : data);
+            }
             console.log(data, "data");
-            if(data.jwt && data.role === 1){
-                console.log(user,'d');
+            if(response.ok && data.jwt && data.role === 1){
                 navigate('/admin');
-              }else{
+              }else if(response.ok && data.jwt && data.role === 0){
                 navigate('/home')
               }
           } catch (err) {
@@ -43,7 +50,8 @@ function useLogin() {
             password,
             setPassword,
             handleSubmitLogin,
-            user
+            user,
+            error
         }
 }
 
