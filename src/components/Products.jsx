@@ -49,7 +49,7 @@ function Products() {
         navigate('/');
       }
       const data = await response.json();
-      setIsDel(true);
+      setIsDel(!isDel);
     } catch (err) {
       console.log(err);
     }
