@@ -1,11 +1,19 @@
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
-const ProtectedRoute = ({ children }) => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  
-  if (!user || user.role === 0) {
-    return <Navigate to="/" replace />;
-  }
-  return children;
+import useAuth from "../hooks/useAuth";
+
+const ProtectedRoute = (props) => {
+  const navigate = useNavigate();
+  const { user, decodedToken } = useAuth();
+  const checkUserToken = () => {
+    if (!user || decodedToken.role === 0) {
+      return navigate("/login");
+    }
+  };
+  useEffect(() => {
+    checkUserToken();
+  }, [user]);
+  return <>{decodedToken ? props.children : null}</>;
 };
 export default ProtectedRoute;
