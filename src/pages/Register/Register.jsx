@@ -13,10 +13,13 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 function Register() {
-  const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate()
+  const [user, setUser] = useState({
+    userName:'',
+    email:'',
+    password:''
+  });
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
  async function handleSubmitRegister(e){
   e.preventDefault();
@@ -24,25 +27,35 @@ function Register() {
       const response = await fetch("http://localhost:3001/register", {
         method: "POST",
         body: JSON.stringify({
-          userName,
-          email,
-          password
+          userName:user.userName,
+          email:user.email,
+          password:user.password
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
         },
       });
       const data = await response.json();
+      // const splited = data?.message?.split('""').join()
       // if(data){
       //   navigate('/login')
       // }
+      if(response.status===400){
+        console.log(data.message,'message');
+        const splited = data.message?.split(' ')
+        // if(splited.includes('match')){
+        //   // console.log(splited,'sp')
+        //   setError('Email is not valid')
+        // }else{
+
+          setError(data.message ? data.message.split('length').join('') : data);
+        // }
+      }
       console.log(data, "data");
     } catch (err) {
-      console.log(err.message);
+      console.log(err,'err');
     }
-    setUserName('');
-    setEmail('');
-    setPassword('');
+    setUser({userName:'', email:'', password:''});
   }
   
   return (    
@@ -71,8 +84,8 @@ function Register() {
                  id="esername"
                  label="UserName"
                  name="username"
-                 value={userName}
-                 onChange={(e)=> setUserName(e.target.value)}
+                 value={user.userName}
+                 onChange={(e)=> setUser((prevState)=>({...prevState, userName:e.target.value}))}
                />
              </Grid>
              <Grid item xs={12}>
@@ -83,8 +96,8 @@ function Register() {
                  label="Email Address"
                  name="email"
                  autoComplete="email"
-                 value={email}
-                 onChange={(e)=> setEmail(e.target.value)}
+                 value={user.email}
+                 onChange={(e)=> setUser((prevState)=>({...prevState, email:e.target.value}))}
                />
              </Grid>
              <Grid item xs={12}>
@@ -96,11 +109,12 @@ function Register() {
                  type="password"
                  id="password"
                  autoComplete="new-password"
-                 value={password}
-                 onChange={(e)=> setPassword(e.target.value)}
+                 value={user.password}
+                 onChange={(e)=> setUser((prevState)=>({...prevState, password:e.target.value}))}
                />
              </Grid>
            </Grid>
+           <Typography variant="body1" sx={{height:'15px', fontSize:'13px',textAlign:'center',color:'red'}}>{error && error}</Typography>
            <Button
              type="submit"
              fullWidth
