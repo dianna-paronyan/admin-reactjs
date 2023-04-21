@@ -19,6 +19,7 @@ function AppRoutes() {
     <Routes>
       <Route path="/" element={user && user.role === 1 ? <Admin /> : <Login/>} />
       <Route path="/register" element={<Register />} />
+      <Route path="/login" element={<Login />} />
       <Route element={<Layout />}>
         <Route path="/home" element={<Home />} />
         <Route path="/products" element={<Products />} />
