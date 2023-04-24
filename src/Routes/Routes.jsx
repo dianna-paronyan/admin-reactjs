@@ -5,12 +5,12 @@ import Layout from "../Layouts/Layout";
 import Home from "../pages/Home";
 import Admin from "../pages/adminPage/Admin";
 import Products from "../components/Products";
-import Users from "../components/Users";
 import CreateProduct from "../components/CreateProduct";
 import EditProduct from "../components/EditProduct";
 import Categories from "../components/Categories";
 import CreateCategory from "../components/CreateCategory";
 import ProtectedRoute from "./ProtectedRoute";
+import EditCategory from "../components/EditCategory";
 
 function AppRoutes() {
   const user = JSON.stringify(localStorage.getItem('user'));
@@ -24,11 +24,11 @@ function AppRoutes() {
         <Route path="/home" element={<Home />} />
         <Route path="/products" element={<Products />} />
         <Route path="/admin" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
-        <Route path="/users" element={<ProtectedRoute><Users /></ProtectedRoute>} />
         <Route path="/createProduct" element={<ProtectedRoute><CreateProduct /></ProtectedRoute>} />
         <Route path="/updateProduct/:id" element={<ProtectedRoute><EditProduct /></ProtectedRoute>} />
         <Route path="/categories" element={<ProtectedRoute><Categories /></ProtectedRoute>} />
         <Route path="/createCategory" element={<ProtectedRoute><CreateCategory /></ProtectedRoute>} />
+        <Route path="/updateCategory/:id" element={<ProtectedRoute><EditCategory /></ProtectedRoute>} />
       </Route>
     </Routes>
   );
