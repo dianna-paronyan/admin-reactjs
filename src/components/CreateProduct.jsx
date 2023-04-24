@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -5,8 +7,7 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Typography } from "@mui/material";
 
 function CreateProduct() {
   const [product, setProduct] = useState({
@@ -17,12 +18,19 @@ function CreateProduct() {
     description: "",
     quantity: "",
   });
+  const [err, setErr] = useState('');
+  
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
 
   async function submitCreateProduct(e) {
     e.preventDefault();
-    const token = JSON.parse(localStorage.getItem("user"));
+    const user = JSON.parse(localStorage.getItem("user"));
+    if(product.name.trim() === '' || product.image.trim() === '' || product.categoryId === '' || product.price.trim() === '' || 
+    product.description.trim() === '' || product.quantity.trim() === ''){
+      setErr('Fill all fields')
+      return
+    }
     try {
       const response = await fetch("http://localhost:3001/createProduct", {
         method: "POST",
@@ -36,12 +44,14 @@ function CreateProduct() {
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
-          Authorization: token.jwt,
+          Authorization: user.jwt,
         },
       });
       if(response.status === 401 || response.status === 403){
         console.log(response.status);
         navigate('/');
+      }else{
+        navigate('/products');
       }
       const data = await response.json();
       console.log(data, "data");
@@ -62,6 +72,7 @@ function CreateProduct() {
 
   return (
     <div>
+      <Typography component="h2" variant="h5" color="#333" sx={{textAlign:'center', marginTop:'15px'}}>Create Product</Typography>
       <Box
         component="form"
         sx={{
@@ -127,6 +138,7 @@ function CreateProduct() {
           value={product.quantity}
           onChange={(e) => setProduct(prevState => ({ ...prevState, quantity: e.target.value }))}
         />
+        <Typography  component='p' color="red" sx={{ height:'10px',textAlign:'center',fontSize:'15px'}}>{err ? err : ''}</Typography>
         <Button variant="outlined" onClick={submitCreateProduct}>
           Submit
         </Button>
