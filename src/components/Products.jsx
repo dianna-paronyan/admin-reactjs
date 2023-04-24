@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Link from "../pages/adminPage/Link";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -8,10 +11,9 @@ import Paper from "@mui/material/Paper";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import Container from "@mui/material/Container";
-import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import Box from "@mui/material/Box";
+import { Typography } from "@mui/material";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -57,33 +59,32 @@ function Products() {
 
   return (
     <div>
-      <Container sx={{ display: "flex", flexDirection: "column" }}>
-        <Stack
-          sx={{
-            display: "flex",
-            justifyContent: "end",
-            alignItems: "end",
-            marginTop: "20px",
-          }}
-        >
-          <Button variant="contained">
-            <Link to="/createProduct">New Product</Link>
-          </Button>
-        </Stack>
+      <Typography component="h2" variant="h5" color="#333" sx={{textAlign:'center', marginTop:'15px'}}>All Products</Typography>
+      <Container sx={{ width:'80%', margin:'auto',display: "flex", justifyContent:'center',alignItems:'center', flexDirection: "column" }}>
         <TableContainer
           component={Paper}
           sx={{ width: "90%", margin: "50px auto" }}
         >
+          <Box sx={{ display: "flex",
+            justifyContent: "end",
+            alignItems: "end"}}>
+
+           <Button variant="contained" sx={{backgroundColor:'#DADADA',display: "flex",
+            justifyContent: "end",
+            alignItems: "end",}}>
+            <Link to="/createProduct">New Product</Link>
+          </Button>
+          </Box>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
-              <TableRow>
-                <TableCell align="center">Name</TableCell>
-                <TableCell align="center">Image</TableCell>
-                <TableCell align="center">Price</TableCell>
-                <TableCell align="center">Description</TableCell>
-                <TableCell align="center">Category</TableCell>
-                <TableCell align="center">Quantity</TableCell>
-                <TableCell align="center">Actions</TableCell>
+              <TableRow style={{backgroundColor:'#13A2B7'}}>
+                <TableCell align="center" sx={{color:'#fff'}}>Name</TableCell>
+                <TableCell align="center" sx={{color:'#fff'}}>Image</TableCell>
+                <TableCell align="center" sx={{color:'#fff'}}>Price</TableCell>
+                <TableCell align="center" sx={{color:'#fff'}}>Description</TableCell>
+                <TableCell align="center" sx={{color:'#fff'}}>Category</TableCell>
+                <TableCell align="center" sx={{color:'#fff'}}>Quantity</TableCell>
+                <TableCell align="center" sx={{color:'#fff'}}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
