@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button } from "@mui/material";
-import TextField from "@mui/material/TextField";
 import { Typography } from "@mui/material";
+import TextField from "@mui/material/TextField";
 
 function CreateCategory() {
   const [name, setName] = useState("");
+  const [created, setCreated] = useState('');
   const [err, setErr] = useState("");
   const navigate = useNavigate();
-  async function createCategory() {
-    const token = JSON.parse(localStorage.getItem("user"));
+
+  async function createCategory(e) {
+    e.preventDefault();
+    const user = JSON.parse(localStorage.getItem("user"));
     if (name.trim() === "") {
       setErr("Add Category Name");
       return;
@@ -22,16 +25,18 @@ function CreateCategory() {
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
-          Authorization: token.jwt,
+          Authorization: user.jwt,
         },
       });
-
-      if (response.status === 401 || response.status === 403) {
-        console.log(response.status);
-        navigate("/");
+      setErr('');
+      setCreated('')
+      if (!response.ok) {
+        setCreated('')
+        setErr('Not Found');
       } else {
         setErr("");
-        navigate("/categories");
+        setCreated('Category Created')
+        // navigate("/categories");
       }
     } catch (err) {
       console.log(err);
@@ -48,6 +53,7 @@ function CreateCategory() {
         alignItems: "center",
         flexDirection: "column",
       }}
+      
     >
       <Typography
         component="h2"
@@ -57,6 +63,7 @@ function CreateCategory() {
       >
         Create Category
       </Typography>
+      <Typography  component='p' color="blue" sx={{ height:'10px',textAlign:'center',fontSize:'15px'}}>{created ? created : ''}</Typography>
       <TextField
         id="outlined-basic"
         label="Name"

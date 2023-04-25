@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -7,7 +8,6 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import { Typography } from "@mui/material";
 
 function CreateProduct() {
   const [product, setProduct] = useState({
@@ -18,18 +18,18 @@ function CreateProduct() {
     description: "",
     quantity: "",
   });
-  const [err, setErr] = useState('');
-  
   const [categories, setCategories] = useState([]);
+  const [created, setCreated] = useState('');
+  const [err, setErr] = useState('');
   const navigate = useNavigate();
 
-  async function submitCreateProduct(e) {
+  async function createProduct(e) {
     e.preventDefault();
     const user = JSON.parse(localStorage.getItem("user"));
     if(product.name.trim() === '' || product.image.trim() === '' || product.categoryId === '' || product.price.trim() === '' || 
     product.description.trim() === '' || product.quantity.trim() === ''){
-      setErr('Fill all fields')
-      return
+      setErr('Fill all fields');
+      return;
     }
     try {
       const response = await fetch("http://localhost:3001/createProduct", {
@@ -47,14 +47,14 @@ function CreateProduct() {
           Authorization: user.jwt,
         },
       });
-      if(response.status === 401 || response.status === 403){
-        console.log(response.status);
-        navigate('/');
+      if(!response.ok){
+        setCreated('');
+        setErr('404 Not Found');
       }else{
-        navigate('/products');
+        setErr('');
+        setCreated('Product Created');
+        // navigate('/products');
       }
-      const data = await response.json();
-      console.log(data, "data");
     } catch (err) {
       console.log(err);
     }
@@ -65,7 +65,6 @@ function CreateProduct() {
     fetch("http://localhost:3001/categories")
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         setCategories(res);
       });
   }, []);
@@ -73,8 +72,8 @@ function CreateProduct() {
   return (
     <div>
       <Typography component="h2" variant="h5" color="#333" sx={{textAlign:'center', marginTop:'15px'}}>Create Product</Typography>
+      <Typography  component='p' color="blue" sx={{ height:'10px',textAlign:'center',fontSize:'15px'}}>{created ? created : ''}</Typography>
       <Box
-        component="form"
         sx={{
           "& > :not(style)": { m: 1, width: "41ch" },
           marginTop: "20px",
@@ -83,9 +82,9 @@ function CreateProduct() {
           alignItems: "center",
           flexDirection: "column",
         }}
-        noValidate
+        component="form"
         autoComplete="off"
-        onSubmit={submitCreateProduct}
+        onSubmit={createProduct}
       >
         <TextField
           id="outlined-basic"
@@ -139,7 +138,7 @@ function CreateProduct() {
           onChange={(e) => setProduct(prevState => ({ ...prevState, quantity: e.target.value }))}
         />
         <Typography  component='p' color="red" sx={{ height:'10px',textAlign:'center',fontSize:'15px'}}>{err ? err : ''}</Typography>
-        <Button variant="outlined" onClick={submitCreateProduct}>
+        <Button variant="outlined" onClick={createProduct}>
           Submit
         </Button>
       </Box>
