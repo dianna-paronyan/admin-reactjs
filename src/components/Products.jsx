@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Link from "../pages/adminPage/Link";
+import Link from "./Link";
+import { Typography } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -13,7 +14,6 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
-import { Typography } from "@mui/material";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -46,11 +46,9 @@ function Products() {
           },
         }
       );
-      if(response.status === 401 || response.status === 403){
-        console.log(response.status);
+      if(!response.ok){
         navigate('/');
       }
-      const data = await response.json();
       setIsDel(!isDel);
     } catch (err) {
       console.log(err);
