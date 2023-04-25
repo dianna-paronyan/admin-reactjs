@@ -1,26 +1,24 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
 import { Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
 
 function EditCategory() {
-  const [name, setName] = useState("");
-  const [categories, setCategories] = useState([]);
+
+  const [category, setCategory] = useState({});
+  const [err, setErr] = useState('');
+  const [updated, setUpdated] = useState('');
   const { id } = useParams();
 
-  const editedCategory = useMemo(()=> categories.find((el) => el.id.toString() === id.toString()),[categories,id]);
-  console.log(editedCategory,'edit');
-
   useEffect(() => {
-    fetch("http://localhost:3001/categories")
+    fetch(`http://localhost:3001/category/${id}`)
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
-        setCategories(res);
+        setCategory(res);
       });
-  }, []);
+  }, [id]);
 
   const updateCategory = async (id) => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -30,8 +28,7 @@ function EditCategory() {
         {
           method: "PUT",
           body: JSON.stringify({
-            name,
-            id,
+            name:category.name,
           }),
           headers: {
             "Content-type": "application/json; charset=UTF-8",
@@ -39,11 +36,13 @@ function EditCategory() {
           },
         }
       );
-      if (response.status === 401 || response.status === 403) {
-        console.log(response.status);
-        navigate("/login");
+      setUpdated('');
+      setErr('');
+      if (!response.ok) {
+        setErr('Not Found');
+      }else{
+        setUpdated('Category Updated');
       }
-      const data = await response.json();
     } catch (err) {
       console.log(err);
     }
@@ -68,15 +67,15 @@ function EditCategory() {
       >
         Edit Category
       </Typography>
+      <Typography  component='p' color="blue" sx={{ height:'10px',textAlign:'center',fontSize:'15px'}}>{err ? err : updated}</Typography>
       {
-        editedCategory ? 
+        category.name ? 
         <TextField
           id="outlined-basic"
           label="Name"
           variant="outlined"
-          // value={name}
-          defaultValue={editedCategory?.name}
-          onChange={(e) => setName(e.target.value)}
+          value={category.name}
+          onChange={(e) => setCategory(prevState=> ({...prevState, name:e.target.value}))}
         /> : <></>
       }
       <Button variant="outlined" onClick={() => updateCategory(id)}>

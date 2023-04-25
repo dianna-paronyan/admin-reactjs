@@ -10,27 +10,22 @@ import Select from "@mui/material/Select";
 import { Typography } from "@mui/material";
 
 function EditProduct() {
-  const { id } = useParams();
-  const [product, setProduct] = useState({
-    name: "",
-    image: "",
-    categoryId: "",
-    price: "",
-    description: "",
-    quantity: "",
-  });
   const [categories, setCategories] = useState([]);
-  const [products, setProducts] = useState([]);
-  const navigate = useNavigate();
-  const editedProduct = products.find((el) => el.id.toString() === id.toString());
+  const [product, setProduct] = useState({});
+  const [updated, setUpdated] = useState('');
+  const [err, setErr] = useState('');
+  const { id } = useParams();
 
   useEffect(() => {
-    fetch("http://localhost:3001/products")
+    fetch(`http://localhost:3001/product/${id}`)
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
-        setProducts(res);
+        console.log(res, "one");
+        setProduct(res);
       });
+  }, [id]);
+
+  useEffect(() => {
     fetch("http://localhost:3001/categories")
       .then((res) => res.json())
       .then((res) => {
@@ -39,8 +34,7 @@ function EditProduct() {
       });
   }, []);
 
-  const submitUpdateProduct = (id) => async (e) => {
-    e.preventDefault();
+  const updateProduct = async (id) => {
     const token = JSON.parse(localStorage.getItem("user"));
     try {
       const response = await fetch(
@@ -61,22 +55,16 @@ function EditProduct() {
           },
         }
       );
-      if (response.status === 401 || response.status === 403) {
-        console.log(response.status);
-        navigate("/");
+      setUpdated('');
+      setErr('');
+      if (!response.ok) {
+        setErr('Not Found');
+      }else{
+        setUpdated('Product Updated');
       }
-      const data = await response.json();
     } catch (err) {
       console.log(err);
     }
-    setProduct({
-      name: "",
-      image: "",
-      categoryId: "",
-      price: "",
-      description: "",
-      quantity: "",
-    });
   };
 
   return (
@@ -89,7 +77,8 @@ function EditProduct() {
       >
         Edit Product
       </Typography>
-      {editedProduct ? (
+      <Typography  component='p' color="blue" sx={{ height:'10px',textAlign:'center',fontSize:'15px'}}>{err ? err : updated}</Typography>
+      {product.name ? (
         <Box
           component="form"
           sx={{
@@ -104,10 +93,9 @@ function EditProduct() {
           autoComplete="off"
         >
           <TextField
-            id="name"
+            id="outlined-helperText"
             label="Name"
-            defaultValue={editedProduct.name}
-            // value={product.name}
+            value={product.name}
             onChange={(e) =>
               setProduct((prevState) => ({
                 ...prevState,
@@ -119,9 +107,8 @@ function EditProduct() {
           <TextField
             id="image"
             label="Image"
-            defaultValue={editedProduct.image}
             variant="outlined"
-            // value={product.image}
+            value={product.image}
             onChange={(e) =>
               setProduct((prevState) => ({
                 ...prevState,
@@ -131,14 +118,13 @@ function EditProduct() {
           />
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">
-              {editedProduct.Category.name}
+              Category
             </InputLabel>
             <Select
-              labelId="categoryId"
-              id="category"
-              // value={product.categoryId}
-              label="Category"
-              defaultValue={editedProduct.categoryId}
+               labelId="categoryId"
+               id="category"
+               value={product.categoryId}
+               label="Category"
               onChange={(e) =>
                 setProduct((prevState) => ({
                   ...prevState,
@@ -157,8 +143,7 @@ function EditProduct() {
             id="price"
             label="Price"
             variant="outlined"
-            // value={product.price}
-            defaultValue={editedProduct.price}
+            value={product.price}
             onChange={(e) =>
               setProduct((prevState) => ({
                 ...prevState,
@@ -170,8 +155,7 @@ function EditProduct() {
             id="description"
             label="Description"
             variant="outlined"
-            // value={product.description}
-            defaultValue={editedProduct.description}
+            value={product.description}
             onChange={(e) =>
               setProduct((prevState) => ({
                 ...prevState,
@@ -183,8 +167,7 @@ function EditProduct() {
             id="quantity"
             label="Quantity"
             variant="outlined"
-            // value={product.quantity}
-            defaultValue={editedProduct.quantity}
+            value={product.quantity}
             onChange={(e) =>
               setProduct((prevState) => ({
                 ...prevState,
@@ -192,7 +175,7 @@ function EditProduct() {
               }))
             }
           />
-          <Button variant="outlined" onClick={submitUpdateProduct(id)}>
+          <Button variant="outlined" onClick={()=>updateProduct(id)}>
             Update
           </Button>
         </Box>
