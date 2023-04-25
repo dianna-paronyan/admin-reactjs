@@ -10,7 +10,7 @@ import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { ImageListItem } from "@mui/material";
-import Link from "../../pages/adminPage/Link";
+import Link from "../../components/Link";
 
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
