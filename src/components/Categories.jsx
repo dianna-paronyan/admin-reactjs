@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Link from "../pages/adminPage/Link";
+import Link from "./Link";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -18,17 +18,14 @@ function Categories() {
   const [categories, setCategories] = useState([]);
   const [isDel, setIsDel] = useState(false);
 
-
   useEffect(() => {
     fetch("http://localhost:3001/categories")
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         setCategories(res);
       });
   }, [isDel]);
-
-  
+ 
   const deleteCategory = async (id) => {
     const user = JSON.parse(localStorage.getItem("user"));
     try {
@@ -45,8 +42,6 @@ function Categories() {
           },
         }
       );
-      const data = await response.json();
-      console.log(data, "data");
       setIsDel(!isDel);
     } catch (err) {
       console.log(err);
@@ -82,7 +77,7 @@ function Categories() {
               <TableCell align="center" sx={{ color: "#fff" }}>
                 Name
               </TableCell>
-              <TableCell align="center" style={{ color: "#fff" }}>
+              <TableCell align="center" sx={{ color: "#fff" }}>
                 Actions
               </TableCell>
             </TableRow>
