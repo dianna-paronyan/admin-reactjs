@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import Link from "./Link";
+import Link from "../../components/Link";
+import Chart from "../../components/Chart";
 import { MenuItem, MenuList, Box, Avatar, Typography } from "@mui/material";
 import Paper from "@mui/material/Paper";
-import TablePagination from '@mui/material/TablePagination';
-import DashboardIcon from '@mui/icons-material/Dashboard';
+import TablePagination from "@mui/material/TablePagination";
+import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import AddIcon from "@mui/icons-material/Add";
 import CategoryIcon from "@mui/icons-material/Category";
@@ -15,7 +16,6 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Chart from "../../components/Chart";
 
 function Admin() {
   const [users, setUsers] = useState([]);
@@ -24,12 +24,12 @@ function Admin() {
   const [rpg, setrpg] = useState(5);
 
   function handleChangePage(event, newpage) {
-      setpg(newpage);
+    setpg(newpage);
   }
 
   function handleChangeRowsPerPage(event) {
-      setrpg(parseInt(event.target.value, 10));
-      setpg(0);
+    setrpg(parseInt(event.target.value, 10));
+    setpg(0);
   }
 
   useEffect(() => {
@@ -70,7 +70,7 @@ function Admin() {
             </Typography>
           </MenuItem>
           <MenuItem sx={{ marginTop: "15px", color: "#4F47E3" }}>
-            <DashboardIcon/>
+            <DashboardIcon />
             Dashboard
           </MenuItem>
           <Link to="/createProduct">
@@ -126,10 +126,10 @@ function Admin() {
                   width: 200,
                   height: 150,
                   display: "flex",
-                  justifyContent:'center',
-                  alignItems:'center',
-                  flexDirection:'column',
-                  gap:'10px'
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "column",
+                  gap: "10px",
                 }}
               >
                 <PeopleAltIcon />
@@ -152,7 +152,7 @@ function Admin() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            flexDirection:'column'
+            flexDirection: "column",
           }}
         >
           <TableContainer
@@ -160,12 +160,20 @@ function Admin() {
             sx={{ margin: "5px auto", width: "98%" }}
           >
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead sx={{backgroundColor:'#13A2B7'}}>
-                <TableRow >
-                  <TableCell align="center" sx={{color:'#fff'}}>ID</TableCell>
-                  <TableCell align="center" sx={{color:'#fff'}}>UserName</TableCell>
-                  <TableCell align="center" sx={{color:'#fff'}}>Email</TableCell>
-                  <TableCell align="center" sx={{color:'#fff'}}>Date</TableCell>
+              <TableHead sx={{ backgroundColor: "#13A2B7" }}>
+                <TableRow>
+                  <TableCell align="center" sx={{ color: "#fff" }}>
+                    ID
+                  </TableCell>
+                  <TableCell align="center" sx={{ color: "#fff" }}>
+                    UserName
+                  </TableCell>
+                  <TableCell align="center" sx={{ color: "#fff" }}>
+                    Email
+                  </TableCell>
+                  <TableCell align="center" sx={{ color: "#fff" }}>
+                    Date
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
