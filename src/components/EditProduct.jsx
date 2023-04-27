@@ -78,7 +78,7 @@ function EditProduct() {
         Edit Product
       </Typography>
       <Typography  component='p' color="blue" sx={{ height:'10px',textAlign:'center',fontSize:'15px'}}>{err ? err : updated}</Typography>
-      {product.name ? (
+      {product.name !==undefined ? (
         <Box
           component="form"
           sx={{

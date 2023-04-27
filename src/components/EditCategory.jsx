@@ -69,7 +69,7 @@ function EditCategory() {
       </Typography>
       <Typography  component='p' color="blue" sx={{ height:'10px',textAlign:'center',fontSize:'15px'}}>{err ? err : updated}</Typography>
       {
-        category.name ? 
+        category.name !== undefined ? 
         <TextField
           id="outlined-basic"
           label="Name"
