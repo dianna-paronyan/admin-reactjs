@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import useLocalStorage from "../hooks/useLocalStorage";
 import Link from "./Link";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -27,7 +28,7 @@ function Categories() {
   }, [isDel]);
  
   const deleteCategory = async (id) => {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const {user} = useLocalStorage()
     try {
       const response = await fetch(
         `http://localhost:3001/deleteCategory/${id}`,
