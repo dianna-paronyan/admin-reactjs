@@ -36,8 +36,6 @@ function Register() {
       });
       const data = await response.json();
       if (response.status === 400) {
-        console.log(data.message, "message");
-        const splited = data.message?.split(" ");
         setError(data.message ? data.message.split("length").join("") : data);
       }
       console.log(data, "data");

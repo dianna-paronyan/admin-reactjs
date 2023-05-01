@@ -11,7 +11,6 @@ import Container from "@mui/material/Container";
 import { useNavigate } from "react-router-dom";
 import useLogin from "../../hooks/useLogin";
 
-
 function Login() {
   const { email, setEmail, password, setPassword, handleSubmitLogin, error } = useLogin();
   const navigate = useNavigate();
@@ -28,7 +27,6 @@ function Login() {
         }}
       >
         <Avatar sx={{ m: 1, bgcolor: "#4AC59A" }}>
-
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
@@ -64,12 +62,22 @@ function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <Typography variant="body1" sx={{height:'15px', fontSize:'13px',textAlign:'center',color:'red'}}>{error && error}</Typography>
+          <Typography
+            variant="body1"
+            sx={{
+              height: "15px",
+              fontSize: "13px",
+              textAlign: "center",
+              color: "red",
+            }}
+          >
+            {error && error}
+          </Typography>
           <Button
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2, bgcolor:'#7FABAA' }}
+            sx={{ mt: 3, mb: 2, bgcolor: "#7FABAA" }}
           >
             Sign In
           </Button>
