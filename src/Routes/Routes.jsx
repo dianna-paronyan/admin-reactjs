@@ -1,4 +1,5 @@
 import { Route, Routes } from "react-router-dom";
+import useLocalStorage from "../hooks/useLocalStorage";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import Layout from "../Layouts/Layout";
@@ -12,7 +13,6 @@ import CreateCategory from "../components/CreateCategory";
 import ProtectedRoute from "./ProtectedRoute";
 import EditCategory from "../components/EditCategory";
 import NotFound from "../components/NotFound";
-import useLocalStorage from "../hooks/useLocalStorage";
 
 function AppRoutes() {
   const {user} = useLocalStorage();
