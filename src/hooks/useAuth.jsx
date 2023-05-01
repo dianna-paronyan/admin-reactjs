@@ -1,10 +1,11 @@
 import { decodeToken } from "react-jwt";
+import useLocalStorage from "./useLocalStorage";
 
 function useAuth() {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const decodedToken = decodeToken(user?.jwt);
+  const { user } = useLocalStorage();
+  const decodedToken = decodeToken(user?.jwt);
 
-  return {user, decodedToken}
+  return { user, decodedToken };
 }
 
 export default useAuth;

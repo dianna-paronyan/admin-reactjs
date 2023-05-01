@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import useLocalStorage from "../hooks/useLocalStorage";
 import { useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -25,7 +26,7 @@ function CreateProduct() {
 
   async function createProduct(e) {
     e.preventDefault();
-    const user = JSON.parse(localStorage.getItem("user"));
+    const {user} = useLocalStorage()
     if(product.name.trim() === '' || product.image.trim() === '' || product.categoryId === '' || product.price.trim() === '' || 
     product.description.trim() === '' || product.quantity.trim() === ''){
       setErr('Fill all fields');
@@ -34,14 +35,7 @@ function CreateProduct() {
     try {
       const response = await fetch("http://localhost:3001/createProduct", {
         method: "POST",
-        body: JSON.stringify({
-          name: product.name,
-          image: product.image,
-          categoryId: product.categoryId,
-          price: product.price,
-          description: product.description,
-          quantity: product.quantity,
-        }),
+        body: JSON.stringify(product),
         headers: {
           "Content-type": "application/json; charset=UTF-8",
           Authorization: user.jwt,
@@ -53,7 +47,7 @@ function CreateProduct() {
       }else{
         setErr('');
         setCreated('Product Created');
-        // navigate('/products');
+        navigate('/products');
       }
     } catch (err) {
       console.log(err);

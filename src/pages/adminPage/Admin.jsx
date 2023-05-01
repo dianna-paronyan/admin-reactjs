@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import useLocalStorage from "../../hooks/useLocalStorage";
 import Link from "../../components/Link";
 import Chart from "../../components/Chart";
 import { MenuItem, MenuList, Box, Avatar, Typography } from "@mui/material";
@@ -19,7 +20,7 @@ import TableRow from "@mui/material/TableRow";
 
 function Admin() {
   const [users, setUsers] = useState([]);
-  const user = JSON.parse(localStorage.getItem("user"));
+  const {user} = useLocalStorage()
   const [pg, setpg] = useState(0);
   const [rpg, setrpg] = useState(5);
 
@@ -194,7 +195,7 @@ function Admin() {
             </Table>
           </TableContainer>
           <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
+            rowsPerPageOptions={[5, 7]}
             component="div"
             count={users.length}
             rowsPerPage={rpg}

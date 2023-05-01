@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useLocalStorage from "../hooks/useLocalStorage";
 import { Box, Button } from "@mui/material";
 import { Typography } from "@mui/material";
 import TextField from "@mui/material/TextField";
@@ -12,7 +13,7 @@ function CreateCategory() {
 
   async function createCategory(e) {
     e.preventDefault();
-    const user = JSON.parse(localStorage.getItem("user"));
+    const {user} = useLocalStorage()
     if (name.trim() === "") {
       setErr("Add Category Name");
       return;
@@ -36,7 +37,7 @@ function CreateCategory() {
       } else {
         setErr("");
         setCreated('Category Created')
-        // navigate("/categories");
+        navigate("/categories");
       }
     } catch (err) {
       console.log(err);
