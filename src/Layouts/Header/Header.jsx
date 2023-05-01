@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import useLocalStorage from "../../hooks/useLocalStorage";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -17,6 +18,7 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"];
 function Header() {
   const navigate = useNavigate();
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const {user} = useLocalStorage()
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -47,10 +49,11 @@ function Header() {
             component="div"
             sx={{ flexGrow: 1 }}
           ></Typography>
-          <Box sx={{ flexGrow: 0 }}>
+          <Box sx={{ flexGrow: 0, display:'flex', justifyContent:'center', alignItems:'center',gap:'5px' }}>
+              <Typography color='#333'>{user?.userName}</Typography>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="" src="" />
+                <Avatar alt="Avatar" src="" />
               </IconButton>
             </Tooltip>
             <Menu
