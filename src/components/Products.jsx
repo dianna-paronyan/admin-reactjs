@@ -31,7 +31,6 @@ function Products() {
 
   const deleteProduct = async (id) => {
     const token = JSON.parse(localStorage.getItem('user'));
-    console.log(token.jwt,'t');
     try {
       const response = await fetch(
         `http://localhost:3001/deleteProduct/${id}`,
