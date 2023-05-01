@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import useLocalStorage from "../hooks/useLocalStorage";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
@@ -14,13 +15,14 @@ function EditProduct() {
   const [product, setProduct] = useState({});
   const [updated, setUpdated] = useState('');
   const [err, setErr] = useState('');
+  const [emptyErr, setEmptyErr] = useState('');
+  const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
     fetch(`http://localhost:3001/product/${id}`)
       .then((res) => res.json())
       .then((res) => {
-        console.log(res, "one");
         setProduct(res);
       });
   }, [id]);
@@ -29,38 +31,36 @@ function EditProduct() {
     fetch("http://localhost:3001/categories")
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
         setCategories(res);
       });
   }, []);
 
   const updateProduct = async (id) => {
-    const token = JSON.parse(localStorage.getItem("user"));
+    const {user} = useLocalStorage()
+    if(product.name === '' || product.image === '' || product.categoryId === '' || product.price === '' || 
+    product.description === '' || product.quantity === ''){
+      setEmptyErr('Fill all fields');
+      return;
+    }
     try {
       const response = await fetch(
         `http://localhost:3001/updateProduct/${id}`,
         {
           method: "PUT",
-          body: JSON.stringify({
-            name: product.name,
-            image: product.image,
-            catehoryId: product.categoryId,
-            price: product.price,
-            description: product.description,
-            quantity: product.quantity,
-          }),
+          body: JSON.stringify(product),
           headers: {
             "Content-type": "application/json; charset=UTF-8",
-            Authorization: token.jwt,
+            Authorization: user.jwt,
           },
         }
       );
-      setUpdated('');
-      setErr('');
       if (!response.ok) {
+        setUpdated('');
         setErr('Not Found');
       }else{
+        setEmptyErr('');
         setUpdated('Product Updated');
+        navigate('/products')
       }
     } catch (err) {
       console.log(err);
@@ -175,6 +175,7 @@ function EditProduct() {
               }))
             }
           />
+          <Typography  component='p' color="red" sx={{ height:'10px',textAlign:'center',fontSize:'15px'}}>{emptyErr ? emptyErr : ''}</Typography>
           <Button variant="outlined" onClick={()=>updateProduct(id)}>
             Update
           </Button>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import useLocalStorage from "../hooks/useLocalStorage";
 import { Button } from "@mui/material";
 import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -9,7 +10,9 @@ function EditCategory() {
 
   const [category, setCategory] = useState({});
   const [err, setErr] = useState('');
+  const [emptyErr, setEmptyErr] = useState('');
   const [updated, setUpdated] = useState('');
+  const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
@@ -21,27 +24,31 @@ function EditCategory() {
   }, [id]);
 
   const updateCategory = async (id) => {
-    const user = JSON.parse(localStorage.getItem("user"));
+    const {user} = useLocalStorage()
+    if (category.name === "") {
+      setErr("Add Category Name");
+      return;
+    }
     try {
       const response = await fetch(
         `http://localhost:3001/updateCategory/${id}`,
         {
           method: "PUT",
-          body: JSON.stringify({
-            name:category.name,
-          }),
+          body: JSON.stringify(category),
           headers: {
             "Content-type": "application/json; charset=UTF-8",
             Authorization: user.jwt,
           },
         }
       );
-      setUpdated('');
-      setErr('');
       if (!response.ok) {
-        setErr('Not Found');
+        setUpdated('');
+        setErr('404 Not Found');
       }else{
+        setEmptyErr('');
+        setErr('');
         setUpdated('Category Updated');
+        navigate('/categories');
       }
     } catch (err) {
       console.log(err);
@@ -67,7 +74,7 @@ function EditCategory() {
       >
         Edit Category
       </Typography>
-      <Typography  component='p' color="blue" sx={{ height:'10px',textAlign:'center',fontSize:'15px'}}>{err ? err : updated}</Typography>
+      <Typography  component='p' color="blue" sx={{ height:'10px',textAlign:'center',fontSize:'15px'}}>{updated ? updated : ''}</Typography>
       {
         category.name !== undefined ? 
         <TextField
@@ -78,6 +85,7 @@ function EditCategory() {
           onChange={(e) => setCategory(prevState=> ({...prevState, name:e.target.value}))}
         /> : <></>
       }
+      <Typography  component='p' color="red" sx={{ height:'10px',textAlign:'center',fontSize:'15px'}}>{emptyErr || err ? emptyErr || err : ''}</Typography>
       <Button variant="outlined" onClick={() => updateCategory(id)}>
         Update
       </Button>
