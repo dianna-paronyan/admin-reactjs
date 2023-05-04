@@ -30,7 +30,7 @@ function useLogin() {
             localStorage.setItem('user', JSON.stringify(userData));
             if(response.status===400){
               
-              setError(data.message ? data.message.split('length').join('') : data);
+              setError(data.message ? data.message : data);
             }
             console.log(data, "data");
             if(response.ok && data.jwt && data.role === 1){
