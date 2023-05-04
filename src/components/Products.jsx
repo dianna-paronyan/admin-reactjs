@@ -92,7 +92,7 @@ function Products() {
                 >
                   <TableCell align="center">{product.name}</TableCell>
                   <TableCell align="center">
-                    <img src={product.image} width="80px" />
+                    <img src={product.image} width="50px" />
                   </TableCell>
                   <TableCell align="center">{product.price}</TableCell>
                   <TableCell align="center">{product.description}</TableCell>
