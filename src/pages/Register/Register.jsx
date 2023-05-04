@@ -17,6 +17,7 @@ function Register() {
     email: "",
     password: "",
   });
+  const [registered, setRegistered] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -36,7 +37,11 @@ function Register() {
       });
       const data = await response.json();
       if (response.status === 400) {
-        setError(data.message ? data.message.split("length").join("") : data);
+        setRegistered('');
+        setError(data.message ? data.message : data);
+      }else{
+        setError('');
+        setRegistered('User Created');
       }
       console.log(data, "data");
     } catch (err) {
@@ -61,6 +66,9 @@ function Register() {
         </Avatar>
         <Typography component="h1" variant="h5">
           Sign up
+        </Typography>
+        <Typography component="p" >
+          {registered ? registered : ''}
         </Typography>
         <Box
           component="form"
@@ -136,7 +144,7 @@ function Register() {
             type="submit"
             fullWidth
             variant="contained"
-            sx={{ mt: 3, mb: 2, bgcolor:'#7FABAA' }}
+            sx={{ mt: 3, mb: 2, bgcolor:'#465E5E' }}
           >
             Sign Up
           </Button>
